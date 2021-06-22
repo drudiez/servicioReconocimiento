@@ -32,16 +32,31 @@ def add():
         img_encoding = face_recognition.face_encodings(img)[0]
 
         cur = db.get_db().cursor()
-        #pdb.set_trace()
-        cur.execute("INSERT INTO users (idUser, idFoto, stringFoto) VALUES (?,?,?)",
-                    (idUser, idFoto, pickle.dumps(img_encoding)))
+        # pdb.set_trace()
+        # cur.execute("INSERT INTO users (idUser, idFoto, stringFoto) VALUES (?,?,?)",
+        #             (idUser, idFoto, pickle.dumps(img_encoding)))
 
-        print(img_encoding)
-        print("=======================================")
-        print(pickle.dumps(img_encoding))
+        # print(img_encoding)
+        # print("=======================================")
+        # print(pickle.dumps(img_encoding))
         
-        db.get_db().commit()
+        # db.get_db().commit()
+        # cur.close()
 
-        return idUser + ' Foto añadida'
+        #Como mucho devolverá una fila
+        fila = cur.execute("SELECT * FROM users WHERE idUser="+ idUser + " AND idFoto=" + idFoto).fetchall()
+        if len(fila) != 0:
+            cur.execute("DELETE FROM users WHERE  idUser="+ idUser + " AND idFoto=" + idFoto)
+            cur.execute("INSERT INTO users (idUser, idFoto, stringFoto) VALUES (?,?,?)",
+                    (idUser, idFoto, pickle.dumps(img_encoding)))
+            db.get_db().commit()
+            cur.close()
+            return "fila actualizada"
+        else:
+            cur.execute("INSERT INTO users (idUser, idFoto, stringFoto) VALUES (?,?,?)",
+                    (idUser, idFoto, pickle.dumps(img_encoding)))
+            db.get_db().commit()
+            cur.close()
+            return "fila añadida"
 
    

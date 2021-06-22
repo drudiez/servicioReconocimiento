@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reconocimiento Facial</title>
+</head>
+<body>
+    <h1>Servicio Reconocimiento - Usuarios en la BD</h1>
+    <table style="width:100%; border: 1px solid black;  border-collapse: collapse;">
+        <tr style="width:100%; border: 1px solid black;  border-collapse: collapse;">
+          <th style="border: 1px solid black;  border-collapse: collapse;">IdUser</th>
+          <th style="border: 1px solid black;  border-collapse: collapse;">IdFoto</th>
+          <th style="border: 1px solid black;  border-collapse: collapse;">Encoding</th>
+        </tr>
+        
+        {% for item in data %}
+            <tr style="width:100%; border: 1px solid black;  border-collapse: collapse;">
+                <td style="border: 1px solid black;  border-collapse: collapse;">{{ item[0] }}</td>
+                <td style="border: 1px solid black;  border-collapse: collapse;">{{ item[1] }}</td>
+                <td style="border: 1px solid black;  border-collapse: collapse;">{{ item[2] }}</td>
+            </tr>
+        {% endfor %}
+    </table> 
+    {# a comment #}
+</body>
+</html>

@@ -1,8 +1,7 @@
 
 from flask import request
-from flask import Blueprint
+from flask import Blueprint, render_template
 import pdb
-from flask.scaffold import F
 from . import db
 import face_recognition
 import pickle
@@ -20,18 +19,16 @@ def reconocer():
         idFoto = []
         known_face_encodings = []
         
-
-        #pic es el formato bueno
-
-        pic = pickle.loads(filas[0]['stringFoto'])
-
         for fila in filas:
             known_face_names.append(fila['idUser'])
             idFoto.append(fila['idFoto'])
             known_face_encodings.append(pickle.loads(fila['stringFoto']))
         
-        pdb.set_trace()
-        return "get"
+        data=[]
+        for i in range(len(known_face_encodings)):
+            data.append([known_face_names[i] , idFoto[i] , known_face_encodings[i]])
+
+        return render_template('base.html', data=data)
     
     if request.method == 'POST':
         #Desde la opción body de postman, aqui añadimos la imagen
@@ -63,5 +60,4 @@ def reconocer():
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             id = known_face_ids[best_match_index]
-
-        return id
+        return str(id)
