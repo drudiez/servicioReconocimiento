@@ -31,10 +31,7 @@ def reconocer():
         return render_template('base.html', data=data)
     
     if request.method == 'POST':
-        #Desde la opción body de postman, aqui añadimos la imagen
         file = request.files['file']
-        
-        #Cargamos la imagen en un array numpy, obtenemos los encodings
         img = face_recognition.load_image_file(file)
         unknown_face_encodings = face_recognition.face_encodings(img)[0]
 
