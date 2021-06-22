@@ -57,4 +57,4 @@ def reconocer():
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             id = known_face_ids[best_match_index]
-        return str(id)
+        return str(id),200
