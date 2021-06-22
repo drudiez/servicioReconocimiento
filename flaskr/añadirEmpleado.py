@@ -20,7 +20,8 @@ def add():
         # Desde la parte de params de postman, usamos args
         # id = request.args.get('idfoto')
         #Se puede obtener desde un formulario, usamos form
-        id = request.form.get("idfoto")
+        idUser = request.form.get("iduser")
+        idFoto = request.form.get("idfoto")
         
         
         #Desde la opción body de postman, aqui añadimos la imagen
@@ -28,20 +29,19 @@ def add():
         #Cargamos la imagen en un array numpy
         img = face_recognition.load_image_file(file)
 
-        img_encoding = face_recognition.face_encodings(img)
+        img_encoding = face_recognition.face_encodings(img)[0]
 
         cur = db.get_db().cursor()
         #pdb.set_trace()
-        cur.execute("INSERT INTO users (id,stringFoto) VALUES (?,?)",
-                    (id, pickle.dumps(img_encoding)))
-        # c=pickle.dumps(img_encoding)
-        # d=pickle.load(c)
+        cur.execute("INSERT INTO users (idUser, idFoto, stringFoto) VALUES (?,?,?)",
+                    (idUser, idFoto, pickle.dumps(img_encoding)))
+
         print(img_encoding)
         print("=======================================")
         print(pickle.dumps(img_encoding))
         
         db.get_db().commit()
 
-        return id + ' Foto añadida'
+        return idUser + ' Foto añadida'
 
    

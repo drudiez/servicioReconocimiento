@@ -2,55 +2,66 @@
 from flask import request
 from flask import Blueprint
 import pdb
-
 from flask.scaffold import F
 from . import db
 import face_recognition
 import pickle
+import numpy as np
 
 bpReconocer = Blueprint('reconocer', __name__)
 @bpReconocer.route('/reconocer', methods = ['GET','POST'])
-def add():
+def reconocer():
     if request.method == 'GET':
         cur = db.get_db().cursor()
-        
         filas=cur.execute("SELECT * FROM users").fetchall()
         cur.close()
+
+        known_face_names = []
+        idFoto = []
+        known_face_encodings = []
+        
 
         #pic es el formato bueno
 
         pic = pickle.loads(filas[0]['stringFoto'])
 
-        pdb.set_trace()
-
-
         for fila in filas:
-            print(fila['id'] + fila['stringFoto'])
-
+            known_face_names.append(fila['idUser'])
+            idFoto.append(fila['idFoto'])
+            known_face_encodings.append(pickle.loads(fila['stringFoto']))
         
-        return "es un get"
+        pdb.set_trace()
+        return "get"
     
     if request.method == 'POST':
-        # Desde la parte de params de postman, usamos args
-        # id = request.args.get('idfoto')
-        #Se puede obtener desde un formulario, usamos form
-        id = request.form.get("idfoto")
-        
-        
         #Desde la opción body de postman, aqui añadimos la imagen
         file = request.files['file']
-        #Cargamos la imagen en un array numpy
+        
+        #Cargamos la imagen en un array numpy, obtenemos los encodings
         img = face_recognition.load_image_file(file)
-
-        img_encoding = face_recognition.face_encodings(img)
+        unknown_face_encodings = face_recognition.face_encodings(img)[0]
 
         cur = db.get_db().cursor()
-        
-        cur.execute("INSERT INTO users (id,stringFoto) VALUES (?,?)",
-                    (id, pickle.dumps(img_encoding)))
-        # c=pickle.dumps(img_encoding)
-        # d=pickle.load(c)
-        
-        db.get_db().commit()
+        filas=cur.execute("SELECT * FROM users").fetchall()
+        cur.close()
 
-        return id + ' imagen'
+        known_face_ids = []
+        idFoto = []
+        known_face_encodings = []
+        
+        for fila in filas:
+            known_face_ids.append(fila['idUser'])
+            idFoto.append(fila['idFoto'])
+            known_face_encodings.append(pickle.loads(fila['stringFoto']))
+        
+        #Matches es un array de booleanos, la posición True es la de la persona reconocida
+        matches = face_recognition.compare_faces(known_face_encodings,unknown_face_encodings)
+
+        #face_distances es un array con la distancia euclidea de las conocidas a la desconocida
+        #la componente con valor mínimo es la que mas se parece
+        face_distances = face_recognition.face_distance(known_face_encodings, unknown_face_encodings)
+        best_match_index = np.argmin(face_distances)
+        if matches[best_match_index]:
+            id = known_face_ids[best_match_index]
+
+        return id
