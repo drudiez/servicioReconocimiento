@@ -7,7 +7,6 @@ import face_recognition
 import pickle
 
 bpAñadir = Blueprint('anadir', __name__)
-
 @bpAñadir.route('/add', methods = ['POST'])
 def add():
 

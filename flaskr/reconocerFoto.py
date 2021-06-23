@@ -8,6 +8,8 @@ import pickle
 import numpy as np
 
 bpReconocer = Blueprint('reconocer', __name__)
+id_json = {'id': 'desconocido'}
+
 @bpReconocer.route('/reconocer', methods = ['GET','POST'])
 def reconocer():
     if request.method == 'GET':
@@ -67,6 +69,6 @@ def reconocer():
 
         if matches[best_match_index]:
             id = known_face_ids[best_match_index]
-            db.id_json['id'] = id
-                        
-        return db.id_json, 200
+            id_json['id'] = id
+
+        return id_json, 200

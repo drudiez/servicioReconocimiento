@@ -9,8 +9,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flaskr.db import get_db
 
 # Crea la aplicación
-
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -31,18 +29,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        cur = db.get_db().cursor()
-        cur.execute("INSERT INTO user (id,username, password) VALUES (?,?,?)",
-                    ('55', 'diedgo', '12345'))
-
-        db.get_db().commit()
-
-        msg = "Record successfully added"
-        return msg
 
     app.register_blueprint(añadirEmpleado.bpAñadir)
     app.register_blueprint(reconocerFoto.bpReconocer)

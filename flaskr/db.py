@@ -47,7 +47,6 @@ error_400 = {'error': 'petición incorrecta, faltan parámetros'}
 error_415 = {'error': 'extensión de archivo no soportada'}
 add = {'msg': 'usuario añadido'}
 update = {'msg': 'usuario actualizado'}
-id_json = {'id': 'desconocido'}
 
 
 #Extensiones permitidas
