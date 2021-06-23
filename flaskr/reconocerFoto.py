@@ -6,7 +6,7 @@ from . import db
 import face_recognition
 import pickle
 import numpy as np
-
+import sys
 bpReconocer = Blueprint('reconocer', __name__)
 
 
@@ -33,7 +33,7 @@ def reconocer():
         return render_template('base.html', data=data)
     
     if request.method == 'POST':
-        
+
         id_json = {'id': 'desconocido'}
 
         if 'file' not in request.files:
@@ -44,9 +44,15 @@ def reconocer():
         if not db.allowed_file(file.filename):
             return db.error_415, 415
 
-
         img = face_recognition.load_image_file(file)
-        unknown_face_encodings = face_recognition.face_encodings(img)[0]
+
+        #Puede ser que no se detecten caras en la imagen
+        try:
+            unknown_face_encodings = face_recognition.face_encodings(img)[0]
+        except IndexError as e:
+            print(e)
+            return db.error_400_1, 400
+
 
         cur = db.get_db().cursor()
         filas=cur.execute("SELECT * FROM users").fetchall()

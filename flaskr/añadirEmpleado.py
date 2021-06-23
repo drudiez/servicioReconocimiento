@@ -28,7 +28,12 @@ def add():
         #Cargamos la imagen en un array numpy
         img = face_recognition.load_image_file(file)
 
-        img_encoding = face_recognition.face_encodings(img)[0]
+        #Puede ser que no se detecten caras en la imagen
+        try:
+            img_encoding = face_recognition.face_encodings(img)[0]
+        except IndexError as e:
+            print(e)
+            return db.error_400_1, 400
 
         cur = db.get_db().cursor()
 

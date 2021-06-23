@@ -44,6 +44,8 @@ def init_app(app):
 
 
 error_400 = {'error': 'petición incorrecta, faltan parámetros'}
+error_400_1 = {'error': 'no se detectaron rostros en la imagen'}
+
 error_415 = {'error': 'extensión de archivo no soportada'}
 add = {'msg': 'usuario añadido'}
 update = {'msg': 'usuario actualizado'}

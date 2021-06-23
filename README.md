@@ -17,7 +17,7 @@ Para iniciar el servidor debemos ejecutar los siguentes comandos:
 
 Peticiones:
 
-POST: /add {idfoto, iduser, file}
+    POST: /add {idfoto, iduser, file}
 
-POST: /reconocer {file}
-GET: /reconocer
+    POST: /reconocer {file}
+    GET: /reconocer
