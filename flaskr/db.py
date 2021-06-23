@@ -42,3 +42,16 @@ def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
 
+
+error_400 = {'error': 'petición incorrecta, faltan parámetros'}
+error_415 = {'error': 'extensión de archivo no soportada'}
+add = {'msg': 'usuario añadido'}
+update = {'msg': 'usuario actualizado'}
+id_json = {'id': 'desconocido'}
+
+
+#Extensiones permitidas
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

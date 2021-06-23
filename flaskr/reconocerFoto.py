@@ -31,7 +31,16 @@ def reconocer():
         return render_template('base.html', data=data)
     
     if request.method == 'POST':
+
+        if 'file' not in request.files:
+            return db.error_400, 400
+
         file = request.files['file']
+
+        if not db.allowed_file(file.filename):
+            return db.error_415, 415
+
+
         img = face_recognition.load_image_file(file)
         unknown_face_encodings = face_recognition.face_encodings(img)[0]
 
@@ -42,7 +51,7 @@ def reconocer():
         known_face_ids = []
         idFoto = []
         known_face_encodings = []
-        
+
         for fila in filas:
             known_face_ids.append(fila['idUser'])
             idFoto.append(fila['idFoto'])
@@ -55,7 +64,9 @@ def reconocer():
         #la componente con valor mínimo es la que mas se parece
         face_distances = face_recognition.face_distance(known_face_encodings, unknown_face_encodings)
         best_match_index = np.argmin(face_distances)
+
         if matches[best_match_index]:
             id = known_face_ids[best_match_index]
+            db.id_json['id'] = id
                         
-        return str(id),200
+        return db.id_json, 200
