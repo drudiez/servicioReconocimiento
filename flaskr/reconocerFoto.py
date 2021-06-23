@@ -8,7 +8,7 @@ import pickle
 import numpy as np
 
 bpReconocer = Blueprint('reconocer', __name__)
-id_json = {'id': 'desconocido'}
+
 
 @bpReconocer.route('/reconocer', methods = ['GET','POST'])
 def reconocer():
@@ -33,6 +33,8 @@ def reconocer():
         return render_template('base.html', data=data)
     
     if request.method == 'POST':
+        
+        id_json = {'id': 'desconocido'}
 
         if 'file' not in request.files:
             return db.error_400, 400
