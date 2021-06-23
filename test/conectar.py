@@ -4,7 +4,6 @@ import requests
 url = 'http://192.168.1.35:5000/add'
 url2 = 'http://192.168.1.35:5000/reconocer'
 
-#, 'file': open('test/data/train/ben_afflek/1.jpg', 'rb')
 def subirFoto(idUsuario, idFoto, urlFoto):
     data = {'iduser': idUsuario , 'idfoto': idFoto}
     files= {'file': open( urlFoto + str(idFoto) + '.jpg', 'rb')}
